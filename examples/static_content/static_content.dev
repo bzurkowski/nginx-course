@@ -1,0 +1,31 @@
+server {
+    listen          3240;
+    server_name     static_content.dev;
+
+    # This will match EXACTLY /welcome path. /welcome/gb must have it's own location block
+    #   or nginx will return standard 404.
+    # Since root is set to public folder, we will serve /apps/static_content.dev/old/welcome file.
+    # Not very smart example, but shows what location = does.
+    location = /welcome {
+        root /apps/static_content.dev/old;        
+    }
+
+    # This will match pretty much any route. Still, we're serving static files here, so file:
+    #      /apps/static_content.dev$uri
+    #   must be present.
+    location / {
+        root /apps/static_content.dev;
+    }
+
+    # If the request is sent to /audio, this location's configuration will be used, since it's
+    #   matching the URI more closely than block above. It will use the previous block anyway,
+    #   but as "/media"
+    location /audio {
+       alias /media;
+    }
+
+    location ~ ^/(some|any)thing {
+        add_header Content-Type text/plain;
+        return 200 'You have successfully entered an URI beginning with something. Literally. Or anything...';
+    }
+}
