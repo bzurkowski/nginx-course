@@ -1,0 +1,21 @@
+server {
+    listen          80;
+    server_name     maintenance.dev;
+
+    root            /apps/maintenance.dev;
+    error_page 503  /maintenance.html;
+
+    location / {
+        include /apps/maintenance.dev.conf;
+        if ($maintenance = 1) {
+            return 503;
+        }
+
+        add_header Content-Type text/plain;
+        return 200 'all is good';        
+    }
+
+    location /maintenance.html {
+        internal;
+    }
+}
