@@ -152,3 +152,52 @@ try_files $uri/index.html $uri.html $uri =404;
 ```
 try_files $uri/index.html $uri.html $uri @app;
 ```
+
+### limit_except
+
+```
+Syntax:  limit_except method ... { ... }
+Default: -
+Context: location
+```
+
+* Limits allowed HTTP methods inside a location.
+* The `method` parameter can be one of the following: `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, `MKCOL`, `COPY`, `MOVE`, `OPTIONS`, `PROPFIND`, `PROPPATCH`, `LOCK`, or `UNLOCK`
+* Allowing the `GET` method makes the `HEAD` method also allowed.
+* Access to other methods can be further limited using directives from `ngx_http_access_module` and `ngx_http_auth_basic_module`.
+
+```
+limit_except GET {
+    allow 192.168.1.0/32;
+    deny  all;
+}
+```
+
+Example above will limit access to all methods except `GET` and `HEAD`. Other methods will be allowed only in network `192.168.1.0/32`.
+
+## ngx_http_access_module
+
+### allow/deny
+
+```
+Syntax:	 allow/deny address | CIDR | unix: | all;
+Default: —
+Context: http, server, location, limit_except
+```
+
+* Allows/denies access for the specified network or address. In example below, access is allowed only for IPv4 networks `10.1.1.0/16` and `192.168.1.0/24` excluding the address `192.168.1.1`, and for IPv6 network `2001:0db8::/32`.
+
+```
+location / {
+    deny  192.168.1.1;
+    allow 192.168.1.0/24;
+    allow 10.1.1.0/16;
+    allow 2001:0db8::/32;
+    deny  all;
+}
+```
+
+* The rules are checked in sequence until the first match is found.
+* Useful when we want to block single IPs (eg. bot).
+
+## ngx_http_empty_gif_module
