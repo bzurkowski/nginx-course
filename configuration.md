@@ -94,3 +94,28 @@ server {
     return      444;
 }
 ```
+
+### root
+
+```
+Syntax:	 root path;
+Default: root html;
+Context: http, server, location
+```
+
+* Sets the root directory for the requests.
+* The path value can contain variables, except `$document_root` and `$realpath_root`.
+* A path to the file is constructed by adding a URI to the value of the root directive.
+* Don't put `root` directives in `location` blocks - gets messy!
+
+For example, with the following configuration:
+
+```
+root /data/w3;
+
+location /static {
+  ...
+}
+```
+
+The `/data/w3/static/top.gif` file will be sent in response to the `/static/top.gif` request.
