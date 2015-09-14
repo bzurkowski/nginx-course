@@ -201,3 +201,19 @@ location / {
 * Useful when we want to block single IPs (eg. bot).
 
 ## ngx_http_empty_gif_module
+
+### empty_gif
+
+```
+Syntax:	 empty_gif;
+Default: -
+Context: location
+```
+
+* Emits single-pixel transparent GIF:
+
+```
+location = /_.gif {
+    empty_gif;
+}
+```
