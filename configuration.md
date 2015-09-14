@@ -269,3 +269,13 @@ Context: http, server, location
 * Enables or disables checking the existence of precompressed files.
 * With the `always` value, gzipped file is used in all cases, without checking if the client supports it.
 * The files can be compressed using the `gzip` command, or any other compatible one.
+
+## Variables
+
+* `$args` - arguments in the request line.
+* `$content_length` - `Content-Length` request header field.
+* `$content_type` - `Content-Type` request header field.
+* `$document_root` - `root` or `alias` directive’s value for the current request.
+* `$host` - in this order of precedence: host name from the request line, or host name from the `Host` request header field, or the server name matching a request.
+* `$hostname` - host`s name.
+* `$https` - `on` if connection operates in SSL mode, or an empty string otherwise.
