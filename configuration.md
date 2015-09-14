@@ -119,3 +119,36 @@ location /static {
 ```
 
 The `/data/w3/static/top.gif` file will be sent in response to the `/static/top.gif` request.
+
+### try_files
+
+```
+Syntax:	 try_files file ... uri;
+         try_files file ... =code;
+Default: -
+Context: server, location
+```
+
+* Checks the existence of files in the specified order and uses the first found file for request processing.
+* The path to a file is constructed from the file parameter according to the `root` and `alias` directives.
+* Common use of global `$uri` variable: `$uri.html`, `$uri/.`.
+* If none of the files were found, an internal redirect to the uri specified in the last parameter is made.
+* The last parameter can point to a named location or response code:
+
+```
+location /images/ {
+    try_files $uri /images/default.gif;
+}
+
+location = /images/default.gif {
+    expires 30s;
+}
+```
+
+```
+try_files $uri/index.html $uri.html $uri =404;
+```
+
+```
+try_files $uri/index.html $uri.html $uri @app;
+```
