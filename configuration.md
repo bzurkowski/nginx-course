@@ -217,3 +217,55 @@ location = /_.gif {
     empty_gif;
 }
 ```
+
+## ngx_http_gzip_module
+
+* Filter that compresses responses using the `gzip` method.
+* Helps to reduce the size of transmitted data (by half or even more).
+
+* Increases TTFB (Time To First Byte).
+* Increases CPU usage.
+
+### gzip
+
+```
+Syntax:	 gzip on | off;
+Default: gzip off;
+Context: http, server, location
+```
+
+* Enables or disables gzipping of responses.
+
+### gzip_vary
+
+```
+Syntax:	 gzip_vary on | off;
+Default: gzip_vary off;
+Context: http, server, location
+```
+
+* When the directives `gzip`, `gzip_static`, or `gunzip` are active.
+* Enables or disables inserting the `Vary: Accept-Encoding` response header field.
+* Browsers send requests with headers, among others: `Accept-Encoding` informing whether it supports decompressing server responses.
+* When eg. index.html requested, CDN will cache compressed or uncompressed version of file depending on which client requested first - client with or without compression support.
+* We need to inform CDN to cache separate entries for compressed and uncompressed version of response depending. How?
+* Including `Vary` header in server's response - it's for CDNs (other intermediary brokers?)!
+
+* [Accept-Encoding is very important!](https://www.maxcdn.com/blog/accept-encoding-its-vary-important/)
+
+
+## ngx_http_gzip_static_module
+
+* Allows sending precompressed files with the `.gz` filename extension instead of regular files.
+
+### gzip_static
+
+```
+Syntax:	 gzip_static on | off | always;
+Default: gzip_static off;
+Context: http, server, location
+```
+
+* Enables or disables checking the existence of precompressed files.
+* With the `always` value, gzipped file is used in all cases, without checking if the client supports it.
+* The files can be compressed using the `gzip` command, or any other compatible one.
