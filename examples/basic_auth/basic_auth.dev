@@ -1,0 +1,21 @@
+server {
+    listen         3320;
+    server_name    basic_auth.dev;
+
+    root /apps/basic_auth.dev;
+
+    location /catpeople {
+        auth_basic            "catpeople";
+        auth_basic_user_file  conf/catpeople;
+    }
+
+    location /dogpeople {
+        auth_basic            "dogpeople";
+        auth_basic_user_file  conf/dogpeople;
+    }
+
+    location / {
+       add_header Content-Type text/plain;
+       return 200 "Are you a dog person? Or a cat-slave?";
+    }
+}
